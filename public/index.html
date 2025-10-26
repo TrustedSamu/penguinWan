@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 Penguin Video Studio</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/cute-penguin-holding-fish-cartoon-600nw-2162382091.png" alt="Penguin" class="logo-penguin">
+                    <h1>🐧 Penguin Video Studio</h1>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <nav class="tab-navigation">
+                <button class="tab-btn active" id="imageTabBtn" data-tab="image">
+                    <span class="tab-icon">📸</span>
+                    <span class="tab-title">Image to Video</span>
+                </button>
+                <button class="tab-btn" id="textTabBtn" data-tab="text">
+                    <span class="tab-icon">✍️</span>
+                    <span class="tab-title">Text to Video</span>
+                </button>
+            </nav>
+
+            <!-- Image to Video Tab -->
+            <div class="tab-content active" id="imageTab">
+                <!-- Upload Section -->
+                <section class="upload-section">
+                    <div class="upload-area" id="imageUploadArea">
+                        <div class="upload-content">
+                            <div class="upload-icon">📸</div>
+                            <h3>Drop your image here</h3>
+                            <p>or click to browse</p>
+                            <input type="file" id="imageInput" accept="image/*" hidden>
+                        </div>
+                    </div>
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImg" alt="Preview">
+                        <button class="remove-btn" id="removeImage">❌</button>
+                    </div>
+                </section>
+
+                <!-- Image to Video Settings -->
+                <section class="settings-section">
+                    <h3>⚙️ Image to Video Settings</h3>
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <label for="imagePrompt">Video Description:</label>
+                            <textarea id="imagePrompt" placeholder="Describe what you want to happen in the video..." rows="3"></textarea>
+                        </div>
+                        <div class="setting-group">
+                            <label for="imageDuration">Duration:</label>
+                            <select id="imageDuration" name="imageDuration">
+                                <option value="5">5 seconds</option>
+                                <option value="10" selected>10 seconds</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="imageResolution">Resolution:</label>
+                            <select id="imageResolution" name="imageResolution">
+                                <option value="480p">480p (480P)</option>
+                                <option value="720p">720p (720P)</option>
+                                <option value="1080p" selected>1080p (1080P)</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="imageAudio">Audio:</label>
+                            <select id="imageAudio" name="imageAudio">
+                                <option value="true" selected>Auto Generate</option>
+                                <option value="false">Silent</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="imagePromptExtend">Prompt Enhancement:</label>
+                            <select id="imagePromptExtend" name="imagePromptExtend">
+                                <option value="true" selected>Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="imageWatermark">Watermark:</label>
+                            <select id="imageWatermark" name="imageWatermark">
+                                <option value="false" selected>None</option>
+                                <option value="true">AI Generated</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Image to Video Cost Calculator -->
+                <section class="cost-calculator-section">
+                    <h3>💰 Cost Calculator</h3>
+                    <div class="cost-display">
+                        <div class="cost-item">
+                            <span class="cost-label">Duration:</span>
+                            <span class="cost-value" id="imageDurationCost">$5.00/sec</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Resolution:</span>
+                            <span class="cost-value" id="imageResolutionCost">$0.05/sec</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Audio:</span>
+                            <span class="cost-value" id="imageAudioCost">$0.01/sec</span>
+                        </div>
+                        <div class="cost-total">
+                            <span class="cost-label">Total:</span>
+                            <span class="cost-value" id="imageTotalCost">$30.00</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Text to Video Tab -->
+            <div class="tab-content" id="textTab">
+                <!-- Text Input Section -->
+                <section class="text-input-section">
+                    <h3>✍️ Describe Your Video</h3>
+                    <div class="text-input-area">
+                        <textarea id="textPrompt" placeholder="Describe the video you want to create... (e.g., 'A penguin sliding on ice while doing a backflip')" rows="4"></textarea>
+                        <div class="text-prompt-tips">
+                            <small>💡 Be descriptive! Include details about characters, actions, setting, and style.</small>
+                        </div>
+                    </div>
+                    <div class="negative-prompt-area" style="margin-top: 15px;">
+                        <label for="negativePrompt" style="display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568;">Negative Prompt (Optional):</label>
+                        <textarea id="negativePrompt" placeholder="Describe what you DON'T want in the video... (e.g., 'low quality, blurry, distorted')" rows="2"></textarea>
+                        <div class="negative-prompt-tips">
+                            <small>💡 Specify what to avoid: low quality, blurry, distorted, extra fingers, etc.</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Text to Video Settings -->
+                <section class="settings-section">
+                    <h3>⚙️ Text to Video Settings</h3>
+                    <div class="settings-grid">
+                        <div class="setting-group">
+                            <label for="textDuration">Duration:</label>
+                            <select id="textDuration" name="textDuration">
+                                <option value="5">5 seconds</option>
+                                <option value="10" selected>10 seconds</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="textResolution">Resolution:</label>
+                            <select id="textResolution" name="textResolution">
+                                <option value="480p">480p (832×480)</option>
+                                <option value="720p">720p (1280×720)</option>
+                                <option value="1080p" selected>1080p (1920×1080)</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="textAudio">Audio:</label>
+                            <select id="textAudio" name="textAudio">
+                                <option value="true" selected>Auto Generate</option>
+                                <option value="false">Silent</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="textPromptExtend">Prompt Enhancement:</label>
+                            <select id="textPromptExtend" name="textPromptExtend">
+                                <option value="true" selected>Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label for="textWatermark">Watermark:</label>
+                            <select id="textWatermark" name="textWatermark">
+                                <option value="false" selected>None</option>
+                                <option value="true">AI Generated</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Text to Video Cost Calculator -->
+                <section class="cost-calculator-section">
+                    <h3>💰 Cost Calculator</h3>
+                    <div class="cost-display">
+                        <div class="cost-item">
+                            <span class="cost-label">Duration:</span>
+                            <span class="cost-value" id="textDurationCost">$5.00/sec</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Resolution:</span>
+                            <span class="cost-value" id="textResolutionCost">$0.05/sec</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Audio:</span>
+                            <span class="cost-value" id="textAudioCost">$0.01/sec</span>
+                        </div>
+                        <div class="cost-total">
+                            <span class="cost-label">Total:</span>
+                            <span class="cost-value" id="textTotalCost">$30.00</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Generate Button -->
+            <section class="generate-section">
+                <button class="generate-btn" id="generateBtn" disabled>
+                    <span class="penguin-working" style="display: none;">🐧</span>
+                    🎬 Generate Video
+                </button>
+                <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                    <img src="images/cute-penguin-sliding-on-ice-600nw-2104874411.png" alt="Working Penguin" class="penguin-working">
+                    <p>Generating your amazing video...</p>
+                </div>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">Starting video generation...</p>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h3>🎉 Your Video is Ready!</h3>
+                <div class="video-container">
+                    <video id="generatedVideo" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="results-actions">
+                    <button class="action-btn download-btn" id="downloadBtn">📥 Download Video</button>
+                    <button class="action-btn regenerate-btn" id="regenerateBtn">🔄 Generate Another</button>
+                </div>
+            </section>
+
+            <!-- Error Message -->
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <div class="error-content">
+                    <span class="error-icon">⚠️</span>
+                    <span class="error-text">An error occurred</span>
+                </div>
+            </div>
+
+            <!-- Penguin Team Gallery -->
+            <section class="penguin-gallery">
+                <h3>🐧 Meet the Penguin Team</h3>
+                <div class="penguin-showcase">
+                    <div class="penguin-card">
+                        <img src="images/cute-penguin-holding-fish-cartoon-600nw-2162382091.png" alt="Penguin with Fish" class="gallery-penguin">
+                        <h4>Captain Fish</h4>
+                        <p>The master of image-to-video transformations</p>
+                    </div>
+                    <div class="penguin-card">
+                        <img src="images/cute-penguin-sliding-on-ice-600nw-2104874411.png" alt="Sliding Penguin" class="gallery-penguin">
+                        <h4>Ice Slider</h4>
+                        <p>Expert in text-to-video magic and smooth animations</p>
+                    </div>
+                    <div class="penguin-card">
+                        <img src="images/cute-penguin-waving-hello-cartoon-600nw-2162382093.png" alt="Waving Penguin" class="gallery-penguin">
+                        <h4>Hello Helper</h4>
+                        <p>Always ready to assist with your video generation needs</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
